@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FartWRF</title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <!-- Hello SHIVAMTHEHACKER... GETOUT!!!! <3-->
+    <header><h1>Fart<span>WRF</span></h1></header>
+    <div id="main-content">
+        <aside id="menu">
+            <div id="panel">
+                <h2>VARIABLES</h2>
+                <div id="row">
+                    <div id="temp_accordian">
+                        <h3>TEMPERATURE</h3>
+                        <div id="Temperature_SFC" onclick="displayImage('Temperature_SFC')">SURFACE</div>
+                        <div id="Temperature_850" onclick="displayImage('Temperature_850')">850</div>
+                        <div id="Temperature_700" onclick="displayImage('Temperature_700')">700</div>
+                        <div id="Temperature_500" onclick="displayImage('Temperature_500')">500</div>
+                    </div>
+                    <div id="dew_accordian">
+                        <h3>DEWPOINT</h3>
+                        <div id="Dew_SFC" onclick="displayImage('Dew_SFC')">SURFACE</div>
+                        <div id="Dew_1000" onclick="displayImage('Dew_1000')">1000</div>
+                        <div id="Dew_950" onclick="displayImage('Dew_950')">950</div>
+                        <div id="Dew_850" onclick="displayImage('Dew_850')">850</div>
+                        <div id="Dew_700" onclick="displayImage('Dew_700')">700</div>
+                    </div>
+                </div>
+                <div id="row">
+                    <div id="humid_accordian">
+                        <h3>HUMIDITY</h3>
+                        <div>SURFACE</div>
+                        <div>850</div>
+                        <div>700</div>
+                        <div>500</div>
+                    </div>
+                    <div id="rain_accordian">
+                        <h3>RAINFALL</h3>
+                        <div>ACCUM PRECIP</div>
+                        <div id="MSLP_THICK_PRECIP" onclick="displayImage('MSLP_THICK_PRECIP')">MSLP, PRECIP, THICK</div>
+                        <div id="Forecast_Radar" onclick="displayImage('Forecast_Radar')">FORECAST RADAR</div>
+                    </div>
+                </div>
+                <div id="row">
+                    <div id="wind_accordian">
+                        <h3>WIND</h3>
+                        <div id="Wind_SFC" onclick="displayImage('Wind_SFC')">SURFACE</div>
+                        <div id="Wind_850" onclick="displayImage('Wind_850')">850</div>
+                        <div id="Wind_700" onclick="displayImage('Wind_700')">700</div>
+                        <div id="Wind_500" onclick="displayImage('Wind_500')">500</div>
+                        <div id="Updraft_Hel" onclick="displayImage('Updraft_Hel')">UPDRAFT HELICITY</div>
+                    </div>
+                    <div id="instability_accordian">
+                        <h3>INSTABILITY</h3>
+                        <div id="Cape_SFC" onclick="displayImage('Cape_SFC')">SFC CAPE</div>
+                        <div>LIFTED INDEX</div>
+                        <div>CIN</div>
+                        <div id="Thunderstorms" onclick="displayImage('Thunderstorms')">LIGHTNING</div>
+                        <div>TOTAL TOTALS</div>
+                        <div>PRECIPITABLE WATER</div>
+                    </div>
+                </div>
+                <div id="row">
+                    <div id="cloud_accordian">
+                        <h3>CLOUD</h3>
+                        <div>SIMULATED IR</div>
+                    </div>
+                </div>
+            </div>
+            <div id="panel">
+                <h2>OUTLOOKS</h2>
+                <div id="row">
+                    <div id="Outlook1_accordian">
+                        <h3>Convective Outlook</h3>
+                    </div>
+                    <div id="Outlook2_accordian">
+                        <h3>Other Outlooks</h3>
+                    </div>
+            </div>
+        </aside>
+        <div id="content">
+            <div id="status-bar">
+                <h3>Model Status:</h3>
+                <p id="status-text">Loading model status...</p>
+            </div>
+            <div id="time">
+                <input type="range" id="timeRange" min="0" max="72" value="0" oninput="changeTimeStep(this.value)">
+                <button id="prev-btn"><h3>Previous Image</h3></button>
+                <button id="next-btn"><h3>Next Image</h3></button>
+            </div>
+            <div id="image-container">
+                <div id="cnt-row"></div>
+                <img id="weatherImage" src="" alt="No Selected or Available Image">
+            </div>
+        </div>
+    </div>
+
+    <script src="/time.js"></script>
+    <script>
+        // status bar
+        function fetchStatus() {
+            fetch(`/status.json?nocache=${Date.now()}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('status-text').innerText =
+                        `Step ${data.step}/${data.total_steps} (${data.percent}%) | ETA: ${data.eta} | Done by: ${data.end_time}`;
+                })
+                .catch(() => {
+                    document.getElementById('status-text').innerText =
+                        "Unable to load model status.";
+                });
+        }
+
+        // Refetch every 10 seconds
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchStatus(); // initial
+            setInterval(fetchStatus, 10000); // refresh every 10 seconds
+        });
+
+        setInterval(fetchStatus, 10000); // update every 10 seconds
+        window.onload = fetchStatus;
+
+        document.addEventListener("DOMContentLoaded", function() {
+        // Select all rows
+        const rows = document.querySelectorAll('#panel > div');
+
+        rows.forEach(row => {
+            // Add click event listener to each row
+            row.addEventListener('click', function() {
+                // Hide all rows' content
+                rows.forEach(r => {
+                    const accordions = r.querySelectorAll('div');
+                    accordions.forEach(accordion => {
+                        const contentDivs = accordion.querySelectorAll('div');
+                        contentDivs.forEach(content => {
+                            content.style.display = 'none'; // Hide content
+                        });
+                    });
+                });
+
+                // Show the content of the clicked row
+                const accordions = row.querySelectorAll('div');
+                accordions.forEach(accordion => {
+                    const contentDivs = accordion.querySelectorAll('div');
+                    contentDivs.forEach(content => {
+                        content.style.display = 'block'; // Show content
+                    });
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

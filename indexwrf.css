@@ -1,0 +1,141 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    justify-content: center;
+}
+
+header {
+    display: flex;
+    background-color: rgb(0, 0, 0);
+    padding: 10px;
+    color: white;
+    justify-content: center;
+}
+
+header span {
+    color: rgb(255, 145, 0);
+}
+
+#main-content {
+    display: flex;
+}
+
+#menu {
+    background-color: rgb(43, 43, 43);
+    width: 300px;
+    padding: 10px;
+    color: white;
+    border: 2px solid gray;
+    height: 100vh;
+}
+
+#panel h2 {
+    margin-bottom: 15px;
+}
+
+#row {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+}
+
+/* Accordian Styling */
+#row h3 {
+    background-color: rgb(121, 120, 120);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#row h3:hover {
+    color: black;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* Make starting display none */
+#row > div > div{
+    display: none;
+    padding: 5px;
+}
+
+#row > div {
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+#row > div > div:hover {
+    color: black;
+    background-color: white;    
+    cursor: pointer;
+}
+
+/* Content styling */
+#content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid gray;
+}
+
+#time {
+    display: flex;
+    justify-content: right;
+    background-color: rgb(43, 43, 43);
+    padding: 10px;
+}
+
+#time button {
+    background-color: rgb(121, 120, 120);
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid;
+    cursor: pointer;
+    color: white;
+    margin-left: 10px;
+}
+
+img {
+    max-width: 100%;      
+    height: auto;         
+    display: block;     
+    margin: 0 auto;      
+    
+}
+
+/* Status styling */
+#status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(43, 43, 43);
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-bottom: 2px solid gray;
+    min-width: 600px;           /* Prevent resizing */
+    white-space: nowrap;        /* Prevent line wrap */
+    overflow: hidden;           /* Avoid scrollbars or jitter */
+    text-align: center;         /* Optional: visually center text */
+}
+
+#status-bar h3 {
+    margin-right: 10px;
+    font-size: 18px;
+    color: rgb(255, 145, 0); /* Match your WRF branding color */
+}
+
+#status-text {
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    /* Just in case */
+    transition: opacity 0.3s ease;
+}
